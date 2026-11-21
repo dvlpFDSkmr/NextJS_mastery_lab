@@ -1,7 +1,17 @@
 type PageHeadingProps = {
-  heading: string;
+  heading1: string;
+  heading3?: string;
 };
 
-export default function PageHeading({ heading }: PageHeadingProps) {
-  return <h1>{heading}</h1>;
+export default function PageHeading({ heading1, heading3 }: PageHeadingProps) {
+  return (
+    <div>
+      <b>
+        <h1>{heading1}</h1>
+      </b>
+      <i>
+        <h3>{heading3}</h3>
+      </i>
+    </div>
+  );
 }
