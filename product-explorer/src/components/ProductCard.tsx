@@ -1,6 +1,7 @@
 import type { Product } from "@/types/product";
 import Image from "next/image";
 import styles from "@/styles/Card.module.css";
+import { useRouter } from "next/router";
 
 type ProductCardProps = {
   product: Product;
@@ -8,6 +9,7 @@ type ProductCardProps = {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { title, price, category, thumbnail, rating } = product;
+  const router = useRouter();
 
   return (
     <div className={styles.productCard}>
@@ -19,8 +21,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         Rating: <b>{rating}</b>
       </p>
       <div className={styles.btn}>
-        <button type="button">Details</button>
-        <button type="button">Add to Cart</button>
+        <button type="button" onClick={()=>router.push(`/products/${product.id}`)}>Details</button>
+        <button type="button" >Add to Cart</button>
       </div>
     </div>
   );
