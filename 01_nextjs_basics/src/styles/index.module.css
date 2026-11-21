@@ -1,0 +1,23 @@
+.navigation {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.navigation section {
+  padding: 1rem;
+  border: 1px solid #1632ce;
+  border-radius: 6px;
+}
+
+.navigation .products {
+  background-color: #7eb4ea;
+}
+
+.navigation .categories {
+  background-color: #6ee997;
+}
+
+.navigation .cart {
+  background-color: #e164ce;
+}
