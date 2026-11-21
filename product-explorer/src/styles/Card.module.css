@@ -1,0 +1,50 @@
+.productCard {
+  width: 230px;
+  border: 1px solid red;
+  border-radius: 6px;
+  padding: 12px;
+  background-color: #ffffff;
+}
+
+.productCard img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.productCard h4 {
+  margin: 10px 0 6px;
+  font-size: 1rem;
+}
+
+.productCard p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+.productCard .price {
+  color: blue;
+  font-weight: bolder;
+}
+
+.btn {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.btn button {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border: 1px solid #1f4b89;
+  background-color: #76ade4;
+  cursor: pointer;
+}
+
+.btn button:hover {
+  background-color: #e2e8f0;
+}
