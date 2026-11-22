@@ -27,13 +27,13 @@ export default function Cart() {
 
       {cartItems.map((item) => (
         <div key={item.product.id} className={styles.cartProd}>
-          <Image src={item.product.thumbnail} alt={item.product.title} width={50} height={50}/>
+          <Image src={item.product.thumbnail} alt={item.product.title} width={70} height={70}/>
           <h3>{item.product.title}</h3>
           <p>Price: ${item.product.price.toFixed(2)}</p>
-          <p>Quantity: {item.quantity}</p>
+          <p><i>Quantity: {item.quantity}</i></p>
 
-          <button onClick={() => increaseQuantity(item.product.id)}> + </button>
-          <button onClick={() => decreaseQuantity(item.product.id)}> - </button>
+          <button onClick={() => increaseQuantity(item.product.id)}>➕</button>
+          <button onClick={() => decreaseQuantity(item.product.id)}>➖</button>
         </div>
       ))}
 
