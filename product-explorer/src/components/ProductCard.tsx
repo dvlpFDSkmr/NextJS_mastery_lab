@@ -2,6 +2,8 @@ import type { Product } from "@/types/product";
 import Image from "next/image";
 import styles from "@/styles/Card.module.css";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 type ProductCardProps = {
   product: Product;
@@ -9,6 +11,7 @@ type ProductCardProps = {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { title, price, category, thumbnail, rating } = product;
+  const cartCTX = useContext(CartContext)
   const router = useRouter();
 
   return (
@@ -22,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </p>
       <div className={styles.btn}>
         <button type="button" onClick={()=>router.push(`/products/${product.id}`)}>Details</button>
-        <button type="button" >Add to Cart</button>
+        <button onClick={()=> cartCTX?.addToCart(product)} type="button" >Add to Cart</button>
       </div>
     </div>
   );

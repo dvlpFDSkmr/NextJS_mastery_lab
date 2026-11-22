@@ -3,7 +3,7 @@
   border: 1px solid red;
   border-radius: 6px;
   padding: 12px;
-  background-color: #ffffff;
+  background-color: #e8c8f2;
 }
 
 .productCard img {
@@ -40,7 +40,7 @@
   flex: 1;
   padding: 6px 10px;
   font-size: 0.8rem;
-  border: 1px solid #1f4b89;
+  border: 1px solid #0f356a;
   background-color: #76ade4;
   cursor: pointer;
 }

@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import type { Product } from "../../types/product";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "../../styles/Dynamic.module.css";
 import Image from "next/image";
+import { CartContext } from "@/context/CartContext";
 
 export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
@@ -10,6 +11,7 @@ export default function ProductPage() {
   const [error, setError] = useState<boolean>(false);
   const [retry, setRetry] = useState<number>(0);
   const router = useRouter();
+  const cartCTX = useContext(CartContext)
 
   useEffect(() => {
     async function getProductData() {
@@ -93,7 +95,7 @@ export default function ProductPage() {
         ) : (
           <p>No reviews yet.</p>
         )}
-        <button className={styles.button}>Add to Cart</button>
+        <button className={styles.button} onClick={()=>cartCTX?.addToCart(product)}>Add to Cart</button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import PageHeading from "@/components/PageHeading";
-import PageInformation from "@/components/PageInformation"; // Spelling fix ki hai
+import PageInformation from "@/components/PageInformation"; 
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 

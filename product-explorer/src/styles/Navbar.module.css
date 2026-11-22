@@ -1,14 +1,17 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   gap: 20px;
   min-height: 50px;
   font-weight: bold;
   font-size: large;
   padding: 0 16px;
   border-bottom: 1px solid #e5e7eb;
-  color: rgb(62, 11, 109);
+  color: rgb(49, 12, 83);
   background-color: rgb(184, 202, 241);
 }
 
