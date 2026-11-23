@@ -14,9 +14,9 @@ export default function Cart() {
     return (
       <div className={styles.emptyCart}>
         <h1>Nothing here BUDDY !!</h1>
-        <h5>
-          Hit the road dude, do some <Link href="/products">Shopping</Link>{" "}
-        </h5>
+        <h4>
+          Hit the road dude, do some <Link href="/products">Shopping</Link>
+        </h4>
       </div>
     );
   }
@@ -27,10 +27,12 @@ export default function Cart() {
 
       {cartItems.map((item) => (
         <div key={item.product.id} className={styles.cartProd}>
-          <Image src={item.product.thumbnail} alt={item.product.title} width={70} height={70}/>
+          <Image src={item.product.thumbnail} alt={item.product.title} width={70} height={70} />
           <h3>{item.product.title}</h3>
           <p>Price: ${item.product.price.toFixed(2)}</p>
-          <p><i>Quantity: {item.quantity}</i></p>
+          <p>
+            <i>Quantity: {item.quantity}</i>
+          </p>
 
           <button onClick={() => increaseQuantity(item.product.id)}>➕</button>
           <button onClick={() => decreaseQuantity(item.product.id)}>➖</button>
@@ -39,8 +41,8 @@ export default function Cart() {
 
       <h2>Subtotal: ${subtotal}</h2>
       <div className={styles.cartActions}>
-          <button onClick={clearCart}>Clear Cart</button>
-          <button>Checkout</button>
+        <button onClick={clearCart}>Clear Cart</button>
+        <button>Checkout</button>
       </div>
     </div>
   );
