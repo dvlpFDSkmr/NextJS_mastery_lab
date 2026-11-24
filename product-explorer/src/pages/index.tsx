@@ -17,6 +17,7 @@ export default function Home() {
         <button className={styles.exploreBtn} onClick={() => router.push("/products")}>
           Explore our shop
         </button>
+        <button className={styles.exploreBtn} onClick={()=> router.push('./Hello')}>Hello Page</button>
       </div>
     </main>
   );
