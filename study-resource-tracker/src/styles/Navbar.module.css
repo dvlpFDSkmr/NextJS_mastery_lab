@@ -1,0 +1,35 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Brand title ("Study Tracker") */
+.header > a {
+  font-weight: 600;
+  font-size: 1.125rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.Nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.Nav a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.95rem;
+}
+
+.Nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
