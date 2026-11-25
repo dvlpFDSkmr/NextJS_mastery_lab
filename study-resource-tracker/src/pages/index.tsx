@@ -2,14 +2,25 @@ import { useMemo, useState } from "react";
 import { seedResources } from "../types/data";
 import type { Resource } from "../types/type";
 import ResourceCard from "@/components/ResourceCard";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-export default function Home() {
+type HomeProps = {
+  resources: Resource[];
+};
+
+export const getServerSideProps = (async () => {
+  const resources = seedResources;
+  console.log(`getServerSideProps`);
+  return { props: { resources } };
+}) as GetServerSideProps<HomeProps>;
+
+export default function Home({ resources }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [search, setSearch] = useState<string>("");
 
   const filteredResources: Resource[] = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return seedResources.filter((resource) => resource.title.toLowerCase().includes(query));
-  }, [search]);
+    return resources.filter((resource) => resource.title.toLowerCase().includes(query));
+  }, [search, resources]);
 
   return (
     <main className="container">
