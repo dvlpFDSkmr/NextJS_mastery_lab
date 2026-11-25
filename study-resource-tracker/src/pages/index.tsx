@@ -8,11 +8,10 @@ type HomeProps = {
   resources: Resource[];
 };
 
-export const getServerSideProps = (async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const resources = seedResources;
-  console.log(`getServerSideProps`);
   return { props: { resources } };
-}) as GetServerSideProps<HomeProps>;
+};
 
 export default function Home({ resources }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [search, setSearch] = useState<string>("");

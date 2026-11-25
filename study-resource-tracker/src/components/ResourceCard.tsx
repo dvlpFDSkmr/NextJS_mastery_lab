@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Resource } from "../types/type";
-import styles from '../styles/Card.module.css'
+import styles from "../styles/Card.module.css";
+import Link from "next/link";
 
 type ResourceCardProps = {
   resource: Resource;
@@ -15,6 +16,9 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
       <span className="tag">{resource.category}</span>
       <span className="muted">{resource.minutes} min</span>
       <button onClick={() => setSaved(!saved)}>{saved ? "✅" : "❌"}</button>
+      <h3>
+        <Link href={`/resources/${resource.id}`}>{resource.title}</Link>
+      </h3>
     </div>
   );
 }
