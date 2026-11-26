@@ -1,17 +1,13 @@
 import { Expense } from "../../types/index";
 import { useState } from "react";
+import { useExpenses } from "../../context/ExpensesContext";
 
 type ExpenseItemProps = {
   expense: Expense;
-  onDelete?: (id: string) => void | Promise<void>;
-  onUpdateAmount?: (id: string, amount: number) => Promise<void> | void;
 };
 
-export function ExpenseItem({
-  expense,
-  onDelete,
-  onUpdateAmount,
-}: ExpenseItemProps) {
+export function ExpenseItem({ expense }: ExpenseItemProps) {
+  const { deleteExpense, updateExpenseAmount } = useExpenses();
   const [isEditing, setIsEditing] = useState(false);
   const [draftAmount, setDraftAmount] = useState(String(expense.amount));
   const [isSaving, setIsSaving] = useState(false);
@@ -28,8 +24,6 @@ export function ExpenseItem({
   }
 
   async function handleSave() {
-    if (!onUpdateAmount) return;
-
     const nextAmount = Number(draftAmount);
     if (draftAmount.trim() === "" || Number.isNaN(nextAmount) || nextAmount <= 0) {
       return;
@@ -37,7 +31,7 @@ export function ExpenseItem({
 
     try {
       setIsSaving(true);
-      await onUpdateAmount(expense.id, nextAmount);
+      await updateExpenseAmount(expense.id, nextAmount);
       setIsEditing(false);
     } finally {
       setIsSaving(false);
@@ -79,24 +73,20 @@ export function ExpenseItem({
             <strong>{expense.title}</strong> — {formattedAmount} ({expense.category}) •{" "}
             {expense.date}
           </span>
-          {onUpdateAmount && (
-            <button
-              type="button"
-              onClick={startEdit}
-              style={{ marginLeft: "10px" }}
-            >
-              Edit
-            </button>
-          )}
-          {onDelete && (
-            <button
-              type="button"
-              onClick={() => onDelete(expense.id)}
-              style={{ marginLeft: "6px" }}
-            >
-              Delete
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={startEdit}
+            style={{ marginLeft: "10px" }}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => deleteExpense(expense.id)}
+            style={{ marginLeft: "6px" }}
+          >
+            Delete
+          </button>
         </>
       )}
     </li>

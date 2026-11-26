@@ -3,11 +3,9 @@ import { ExpenseItem } from "./ExpenseItem";
 
 type ExpenseListProps = {
   expenses: Expense[];
-  onDelete?: (id: string) => void | Promise<void>;
-  onUpdateAmount?: (id: string, amount: number) => Promise<void> | void;
 };
 
-export function ExpenseList({ expenses, onDelete, onUpdateAmount }: ExpenseListProps) {
+export function ExpenseList({ expenses }: ExpenseListProps) {
   if (expenses.length === 0) {
     return <p>No expenses found.</p>;
   }
@@ -15,7 +13,7 @@ export function ExpenseList({ expenses, onDelete, onUpdateAmount }: ExpenseListP
   return (
     <ul>
       {expenses.map((expense) => (
-        <ExpenseItem key={expense.id} expense={expense} onDelete={onDelete} onUpdateAmount={onUpdateAmount} />
+        <ExpenseItem key={expense.id} expense={expense} />
       ))}
     </ul>
   );

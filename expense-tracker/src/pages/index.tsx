@@ -1,10 +1,11 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { Category, CategoryFilter, Expense } from "../../types";
+import { useState } from "react";
+import { CategoryFilter, Expense } from "../../types";
 import { expensesDB } from "../../utils/db";
+import { ExpensesProvider, useExpenses } from "../../context/ExpensesContext";
 import { ExpenseForm } from "@/components/ExpenseForm";
 import { ExpenseList } from "@/components/ExpenseList";
 import { TotalCard } from "@/components/TotalCard";
-import { useState } from "react";
 
 type HomeProps = {
   expenses: Expense[];
@@ -14,80 +15,10 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   return { props: { expenses: expensesDB } };
 };
 
-export default function Home({ expenses: initialExpenses }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+function ExpenseDashboard() {
+  const { expenses, isLoading, error, refreshExpenses, addExpense } = useExpenses();
   const [category, setCategory] = useState<CategoryFilter>("All");
   const [sortmode, setSortmode] = useState<string>("default");
-
-  async function handleRefresh() {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/expenses", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to load expenses");
-
-      const data: Expense[] = await res.json();
-      setExpenses(data);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function handleAddExpense(newExpenseData: { title: string; amount: number; category: Category }) {
-    setError(null);
-
-    const res = await fetch("/api/expenses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newExpenseData),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to add expense");
-
-    setExpenses((prev) => [...prev, data]);
-  }
-
-  async function handleDeleteExpense(id: string) {
-    setError(null);
-
-    try {
-      const res = await fetch("/api/expenses", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to delete expense");
-
-      setExpenses((prev) => prev.filter((item) => item.id !== id));
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  }
-
-  async function handleUpdateAmount(id: string, amount: number) {
-    setError(null);
-
-    const res = await fetch(`/api/expenses/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || "Failed to update amount");
-    }
-
-    setExpenses((prev) => prev.map((item) => (item.id === id ? { ...item, amount: data.amount ?? amount } : item)));
-  }
 
   const filteredExpense: Expense[] = expenses.filter((item) =>
     category === "All" ? true : item.category === category,
@@ -103,7 +34,7 @@ export default function Home({ expenses: initialExpenses }: InferGetServerSidePr
     <div className="main">
       <h1>Expense Tracker</h1>
 
-      <button type="button" onClick={handleRefresh} disabled={isLoading}>
+      <button type="button" onClick={refreshExpenses} disabled={isLoading}>
         {isLoading ? "Refreshing..." : "Refresh"}
       </button>
 
@@ -117,7 +48,7 @@ export default function Home({ expenses: initialExpenses }: InferGetServerSidePr
 
       <TotalCard expenses={sortedExpense} label={category === "All" ? "Total Expenses" : `Total (${category})`} />
 
-      <ExpenseForm onAdd={handleAddExpense} />
+      <ExpenseForm onAdd={addExpense} />
 
       <div style={{ margin: "12px 0" }}>
         <select value={category} onChange={(e) => setCategory(e.target.value as CategoryFilter)}>
@@ -135,7 +66,16 @@ export default function Home({ expenses: initialExpenses }: InferGetServerSidePr
           <option value="date">Date</option>
         </select>
       </div>
-      <ExpenseList expenses={sortedExpense} onDelete={handleDeleteExpense} onUpdateAmount={handleUpdateAmount} />
+
+      <ExpenseList expenses={sortedExpense} />
     </div>
+  );
+}
+
+export default function Home({ expenses }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  return (
+    <ExpensesProvider initialExpenses={expenses}>
+      <ExpenseDashboard />
+    </ExpensesProvider>
   );
 }
