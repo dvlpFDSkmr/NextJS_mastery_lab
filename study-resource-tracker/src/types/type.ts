@@ -4,6 +4,8 @@ export type Task = {
   completed: boolean;
 };
 
+export type FilterType = "All" | "Pending" | "Completed"
+
 const tasks: Task[] = [
   { id: 1, title: "Complete DBMS ER Model", completed: false },
   { id: 2, title: "Revise Normalization", completed: true },

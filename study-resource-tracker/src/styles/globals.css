@@ -93,3 +93,8 @@ select {
 .muted {
   color: #64748b;
 }
+
+.active {
+  background-color: red;
+  color: white;
+}
