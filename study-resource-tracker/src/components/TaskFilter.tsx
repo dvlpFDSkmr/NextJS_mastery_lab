@@ -1,22 +1,22 @@
-import type { FilterType } from "../types/type";
+import { FilterType } from "../types/type";
 
-type TaskFilterProps = {
+type Props = {
   filter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
+  onFilterChange: (f: FilterType) => void;
 };
 
-export function TaskFilter({ filter, onFilterChange }: TaskFilterProps) {
+export function TaskFilter({ filter, onFilterChange }: Props) {
   return (
-    <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
-      <button className={filter === 'All'? "active" : ""} type="button" onClick={() => onFilterChange("All")}>
-        All
-      </button>
-      <button className={filter === 'Pending'? "active" : ""} type="button" onClick={() => onFilterChange("Pending")}>
-        Pending
-      </button>
-      <button className={filter === 'Completed'? "active" : ""} type="button" onClick={() => onFilterChange("Completed")}>
-        Completed
-      </button>
+    <div style={{ margin: "10px 0" }}>
+      {(["All", "Pending", "Completed"] as FilterType[]).map((f) => (
+        <button 
+          key={f} 
+          onClick={() => onFilterChange(f)}
+          style={{ fontWeight: filter === f ? "bold" : "normal", marginRight: "5px" }}
+        >
+          {f}
+        </button>
+      ))}
     </div>
   );
 }

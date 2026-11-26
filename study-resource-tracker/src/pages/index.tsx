@@ -1,23 +1,15 @@
 import { TaskFilter } from "@/components/TaskFilter";
-import { type Task, type FilterType } from "../types/type";
+import { TaskList } from "@/components/TaskList";
+import { TaskForm } from "@/components/TaskForm";
+import { type Task, type FilterType, getTasks } from "../types/type";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
-import { TaskList } from "@/components/TaskList";
 
-type TaskProp = {
-  tasks: Task[];
-};
+type TaskProp = { tasks: Task[] };
 
+// Server Side Fetch (Ab JSONPlaceholder nahi, apna data)
 export const getServerSideProps: GetServerSideProps<TaskProp> = async () => {
-  try {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=15`);
-    const Tasks: Task[] = await response.json();
-    console.log(`runs on server side`);
-    if (!response.ok) throw new Error(`Error`);
-    return { props: { tasks: Tasks } };
-  } catch {
-    return { props: { tasks: [] } };
-  }
+  return { props: { tasks: getTasks() } };
 };
 
 export default function Home({ tasks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -26,41 +18,73 @@ export default function Home({ tasks }: InferGetServerSidePropsType<typeof getSe
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // will be inside home , not outside, as this is main component
+  // Refresh Function (no-store taaki cache ka issue na aaye)
   async function handleRefresh() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=5`);
-      if (response.ok) {
-        const data = await response.json();
-        setCurrentTasks(data);
-      }
+      const res = await fetch(`/api/tasks`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      setCurrentTasks(data);
     } catch {
       setError("Failed to fetch tasks");
-      setCurrentTasks([]);
     } finally {
       setIsLoading(false);
     }
-
-    await new Promise((r) => setTimeout(r, 2000));
   }
 
-  const FilterTasks: Task[] = currentTasks.filter((task) => {
-    const matchesFilter: boolean =
-      filter === "All" || (filter === "Completed" && task.completed) || (filter === "Pending" && !task.completed);
+  // Add Task
+  async function handleAdd(title: string) {
+    await fetch(`/api/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    });
+    handleRefresh();
+  }
 
-    return matchesFilter;
+  // Mark Complete (PATCH)
+  async function handleComplete(id: number) {
+    try {
+      const res = await fetch(`/api/tasks/${id}`, {
+        method: "PATCH",
+        cache: "no-store",
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.log("Error from API:", errorData); // <-- YEH ADD KARO
+      }
+      await handleRefresh();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  const filteredTasks = currentTasks.filter((task) => {
+    if (filter === "Pending") return !task.completed;
+    if (filter === "Completed") return task.completed;
+    return true;
   });
 
   return (
-    <div>
-      <h1>HomePage</h1>
-      <button onClick={handleRefresh} style={{ margin: "10px" }} disabled={isLoading}>
+    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
+      <h1>My Study Tasks</h1>
+
+      <TaskForm onAdd={handleAdd} />
+
+      <button onClick={handleRefresh} disabled={isLoading} style={{ padding: "5px 15px", marginBottom: "10px" }}>
         {isLoading ? "Loading..." : "Refresh"}
       </button>
-      {error === null ? <TaskFilter filter={filter} onFilterChange={setFilter} /> : <h1>{error}</h1>}
-      <div>{tasks.length === 0 ? <h1>Nothing Here....</h1> : <TaskList tasks={FilterTasks} />}</div>
+
+      <TaskFilter filter={filter} onFilterChange={setFilter} />
+
+      {error && <h3 style={{ color: "red" }}>{error}</h3>}
+
+      {currentTasks.length === 0 ? (
+        <h3>Nothing Here....</h3>
+      ) : (
+        <TaskList tasks={filteredTasks} onComplete={handleComplete} />
+      )}
     </div>
   );
 }
