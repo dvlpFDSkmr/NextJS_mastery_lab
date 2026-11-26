@@ -1,20 +1,22 @@
-import { Expense } from "../../types";
+import { Expense } from "../../types/index";
 import { ExpenseItem } from "./ExpenseItem";
 
 type ExpenseListProps = {
   expenses: Expense[];
+  onDelete?: (id: string) => void | Promise<void>;
+  onUpdateAmount?: (id: string, amount: number) => Promise<void> | void;
 };
 
-export function ExpenseList({ expenses }: ExpenseListProps) {
+export function ExpenseList({ expenses, onDelete, onUpdateAmount }: ExpenseListProps) {
+  if (expenses.length === 0) {
+    return <p>No expenses found.</p>;
+  }
+
   return (
-    <div className="list">
-      {expenses.length === 0 ? (
-        <h1>No expenses left</h1>
-      ) : (
-        expenses.map((item) => (
-          <ExpenseItem expense={item} key={item.id} />
-        ))
-      )}
-    </div>
+    <ul>
+      {expenses.map((expense) => (
+        <ExpenseItem key={expense.id} expense={expense} onDelete={onDelete} onUpdateAmount={onUpdateAmount} />
+      ))}
+    </ul>
   );
 }
