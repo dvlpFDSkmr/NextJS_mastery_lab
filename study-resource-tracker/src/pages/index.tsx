@@ -9,10 +9,15 @@ type TaskProp = {
 };
 
 export const getServerSideProps: GetServerSideProps<TaskProp> = async () => {
-  const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=10`);
-  const Tasks: Task[] = await response.json();
-  console.log(`runs on server side`);
-  return { props: { tasks: Tasks } };
+  try {
+    const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=15`);
+    const Tasks: Task[] = await response.json();
+    console.log(`runs on server side`);
+    if (!response.ok) throw new Error(`Error`);
+    return { props: { tasks: Tasks } };
+  } catch {
+    return { props: { tasks: [] } };
+  }
 };
 
 export default function Home({ tasks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -26,7 +31,7 @@ export default function Home({ tasks }: InferGetServerSidePropsType<typeof getSe
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=10`);
+      const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=5`);
       if (response.ok) {
         const data = await response.json();
         setCurrentTasks(data);
