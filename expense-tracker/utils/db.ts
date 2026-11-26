@@ -33,3 +33,12 @@ if (!globalForDb.expensesDB) {
 }
 
 export let expensesDB: Expense[] = globalForDb.expensesDB;
+
+export function removeExpenseById(id: string): boolean {
+  const exists = expensesDB.some((item) => item.id === id);
+  if (!exists) return false;
+
+  expensesDB = expensesDB.filter((item) => item.id !== id);
+  globalForDb.expensesDB = expensesDB;
+  return true;
+}
