@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Next.js Pages Router Docs",
+    "category": "Docs",
+    "minutes": 20
+  },
+  {
+    "id": 2,
+    "title": "Server vs Client Rendering Talk",
+    "category": "Video",
+    "minutes": 35
+  },
+  {
+    "id": 3,
+    "title": "API Routes in Next.js",
+    "category": "Docs",
+    "minutes": 15
+  },
+  {
+    "id": 4,
+    "title": "TypeScript Basics for React",
+    "category": "Article",
+    "minutes": 25
+  },
+  {
+    "id": 5,
+    "title": "HTTP Status Codes Cheat Sheet",
+    "category": "Article",
+    "minutes": 10
+  }
+]

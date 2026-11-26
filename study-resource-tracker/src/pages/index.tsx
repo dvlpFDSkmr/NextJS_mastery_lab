@@ -1,35 +1,7 @@
-import { useMemo, useState } from "react";
-import { seedResources } from "../types/data";
-import type { Resource } from "../types/type";
-import ResourceCard from "@/components/ResourceCard";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-
-type HomeProps = {
-  resources: Resource[];
-};
-
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const resources = seedResources;
-  return { props: { resources } };
-};
-
-export default function Home({ resources }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [search, setSearch] = useState<string>("");
-
-  const filteredResources: Resource[] = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return resources.filter((resource) => resource.title.toLowerCase().includes(query));
-  }, [search, resources]);
-
+export default function Home() {
   return (
-    <main className="container">
-      <h1>Study Resource Tracker</h1>
-      <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder=".... enter item" />
-      {filteredResources.length === 0 ? (
-        <h1>Nothing here....</h1>
-      ) : (
-        filteredResources.map((resource) => <ResourceCard resource={resource} key={resource.id} />)
-      )}
-    </main>
-  );
+    <div>
+      <h1>HomePage</h1>
+    </div>
+  )
 }
