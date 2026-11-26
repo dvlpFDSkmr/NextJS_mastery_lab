@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getTasks, type Task } from "../../types/type";
+import { memorytasks, type Task } from "../../types/type";
 
+const allTasks: Task[] = memorytasks;
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const allTasks: Task[] = getTasks();
   if (req.method === "GET") {
     return res.status(200).json(allTasks);
   }
@@ -10,7 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { title } = req.body;
     if (!title) {
-      return res.status(400).json(`Title is Required`);
+      return res.status(400).json({ error: "Title is Required" });
     }
 
     const nayaTask = { userId: Date.now(), id: Date.now(), title: title, completed: false };

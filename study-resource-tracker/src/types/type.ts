@@ -7,7 +7,7 @@ export type Task = {
 
 export type FilterType = "All" | "Pending" | "Completed";
 
-const tasks: Task[] = [
+export let memorytasks: Task[] = [
   {
     userId: 1,
     id: 1,
@@ -70,6 +70,3 @@ const tasks: Task[] = [
   },
 ];
 
-export function getTasks(): Task[] {
-  return tasks;
-}
