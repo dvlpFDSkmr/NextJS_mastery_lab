@@ -19,14 +19,26 @@ export default function Home({ tasks }: InferGetServerSidePropsType<typeof getSe
   const [filter, setFilter] = useState<FilterType>("All");
   const [currentTasks, setCurrentTasks] = useState<Task[]>(tasks);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // will be inside home , not outside, as this is main component
   async function handleRefresh() {
-    setCurrentTasks([]);
     setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/todos?_limit=10`);
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentTasks(data);
+      }
+    } catch {
+      setError("Failed to fetch tasks");
+      setCurrentTasks([]);
+    } finally {
+      setIsLoading(false);
+    }
+
     await new Promise((r) => setTimeout(r, 2000));
-    setIsLoading(false);
-    setCurrentTasks(tasks);
   }
 
   const FilterTasks: Task[] = currentTasks.filter((task) => {
@@ -42,7 +54,7 @@ export default function Home({ tasks }: InferGetServerSidePropsType<typeof getSe
       <button onClick={handleRefresh} style={{ margin: "10px" }} disabled={isLoading}>
         {isLoading ? "Loading..." : "Refresh"}
       </button>
-      <TaskFilter filter={filter} onFilterChange={setFilter} />
+      {error === null ? <TaskFilter filter={filter} onFilterChange={setFilter} /> : <h1>{error}</h1>}
       <div>{tasks.length === 0 ? <h1>Nothing Here....</h1> : <TaskList tasks={FilterTasks} />}</div>
     </div>
   );
