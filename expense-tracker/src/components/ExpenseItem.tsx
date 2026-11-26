@@ -6,12 +6,13 @@ type ExpenseItemProps = {
 
 export function ExpenseItem({ expense }: ExpenseItemProps) {
   return (
-    <div className="card">
-      <h3>{expense.title}</h3>
-      <p>{expense.category}</p>
-      <p>
-        <b>{expense.amount.toLocaleString("en-IN")}</b>
-      </p>
-    </div>
+    <article className="card">
+      <div>
+        <h3>{expense.title}</h3>
+        <span>{expense.category}</span> <br />
+        <span><i>{expense.date}</i></span>
+      </div>
+      <strong>₹{expense.amount.toLocaleString("en-IN")}</strong>
+    </article>
   );
 }
